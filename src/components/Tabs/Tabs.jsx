@@ -1,4 +1,9 @@
 export const Tabs = ({ tabs = [], activeTabId, onTabSelected }) => {
+  // Якщо tabs пустий — рендеримо нічого (важливо для стабільності)
+  if (!tabs.length) {
+    return null;
+  }
+
   const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs[0];
 
   return (
@@ -8,15 +13,16 @@ export const Tabs = ({ tabs = [], activeTabId, onTabSelected }) => {
           {tabs.map(tab => (
             <li
               key={tab.id}
-              className={activeTab.id === tab.id ? 'is-active' : ''}
+              className={activeTab?.id === tab.id ? 'is-active' : ''}
               data-cy="Tab"
             >
               <a
                 href={`#${tab.id}`}
                 data-cy="TabLink"
-                onClick={element => {
-                  element.preventDefault();
-                  if (tab.id !== activeTab.id) {
+                onClick={e => {
+                  e.preventDefault();
+
+                  if (tab.id !== activeTab?.id) {
                     onTabSelected?.(tab.id);
                   }
                 }}
@@ -29,7 +35,7 @@ export const Tabs = ({ tabs = [], activeTabId, onTabSelected }) => {
       </div>
 
       <div className="block" data-cy="TabContent">
-        {activeTab.content}
+        {activeTab?.content}
       </div>
     </div>
   );
